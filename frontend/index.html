@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minimal Agent Frontend</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <h1>Agent Daten</h1>
+
+        <form id="data-form">
+          <label>
+            Agent ID
+            <input id="agent-id" name="agent_id" value="agent-1" />
+          </label>
+
+          <label>
+            Nachricht
+            <textarea id="message" name="message" rows="4">Hallo Backend</textarea>
+          </label>
+
+          <button type="submit">Senden</button>
+        </form>
+
+        <p id="status" class="status"></p>
+      </section>
+
+      <section class="panel">
+        <div class="list-header">
+          <h2>Backend Daten</h2>
+          <button id="refresh" type="button">Aktualisieren</button>
+        </div>
+        <pre id="output">[]</pre>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

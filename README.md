@@ -1,32 +1,60 @@
-# Minimal Go Agent
+# Multi-Server Agent mit Frontend und Backend
 
-Kleiner HTTP-Agent, der JSON-Daten an ein Backend sendet.
+Minimalbeispiel mit drei getrennten Teilen.
 
-## Start
+- `backend/`: zentrale Go-API, nimmt Daten von allen Agenten an
+- `agent/`: kleiner Go-Agent, laeuft auf mehreren Servern und sendet Heartbeats
+- `frontend/`: statische HTML/CSS/JS-Oberflaeche, liest Daten vom Backend
+
+## 1. Backend zentral starten
 
 ```powershell
-$env:BACKEND_URL="http://localhost:8080/ingest"
+cd backend
 go run .
 ```
 
-Der Agent läuft standardmäßig auf Port `9090`.
+Das Backend laeuft standardmaessig auf `http://localhost:8080`.
 
-## Daten senden
+## 2. Agent auf jedem Server starten
 
-```powershell
-Invoke-RestMethod -Method Post http://localhost:9090/send `
-  -ContentType "application/json" `
-  -Body '{"agent_id":"agent-1","message":"hallo backend"}'
-```
-
-Oder Testpayload senden:
+Auf jedem Server dieselbe Agent-App starten, aber mit eigener `AGENT_ID`.
 
 ```powershell
-Invoke-RestMethod http://localhost:9090/sample
+cd agent
+$env:BACKEND_URL="http://DEIN-BACKEND-SERVER:8080/api/data"
+$env:AGENT_ID="server-1"
+$env:AGENT_INTERVAL_SECONDS="30"
+go run .
 ```
 
-## Konfiguration
+Beispiel fuer einen zweiten Server:
 
-- `BACKEND_URL`: Ziel-URL vom Backend, default `http://localhost:8080/ingest`
-- `AGENT_PORT`: Port vom Agenten, default `9090`
-- `AGENT_ID`: Agent-ID für `/sample`, default `agent-1`
+```powershell
+cd agent
+$env:BACKEND_URL="http://DEIN-BACKEND-SERVER:8080/api/data"
+$env:AGENT_ID="server-2"
+go run .
+```
+
+## 3. Frontend starten
+
+```powershell
+cd frontend
+python -m http.server 3000
+```
+
+Dann im Browser oeffnen:
+
+`http://localhost:3000`
+
+## API
+
+- `GET /api/health`: Status pruefen
+- `GET /api/data`: gespeicherte Daten lesen
+- `POST /api/data`: Daten speichern
+
+## Agent-Konfiguration
+
+- `BACKEND_URL`: zentrale Backend-URL, default `http://localhost:8080/api/data`
+- `AGENT_ID`: eindeutiger Name pro Server, default basiert auf Hostname
+- `AGENT_INTERVAL_SECONDS`: Sendeintervall, default `30`
