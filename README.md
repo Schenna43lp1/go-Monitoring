@@ -1,31 +1,29 @@
-﻿# Multi-Server Monitoring (Frontend + Backend + Agent)
+# Multi-Server Monitoring (Frontend + Backend + Agent)
 
-Kurze Anleitung und Übersicht für das Beispielprojekt. Ziel ist ein leichtgewichtiges Monitoring-System mit mehreren Agenten, einem zentralen Go-Backend und einem einfachen Frontend zur Visualisierung.
+This repository is a minimal example of a small monitoring platform consisting of three components:
 
-## Repositorystruktur
-
-- `backend/` — zentrale Go-API, empfängt Metriken von Agenten und versendet Alerts (z. B. an Discord)
-- `agent/` — kleiner Go-Agent, läuft auf Hosts und sendet CPU-, RAM- und Disk-Metriken
-- `frontend/` — statische HTML/CSS/JS-Oberfläche zur Ansicht von Metriken und Verwaltung von Alert-Regeln
+- `backend/` � central Go API that receives metrics from agents and sends alerts (e.g., to Discord)
+- `agent/` � lightweight Go agent that runs on hosts and sends CPU, RAM and disk metrics
+- `frontend/` � static HTML/CSS/JS UI for metric visualization and alert-rule management
 
 ## Changelog
 
-Weitere Informationen zu Änderungen und Releases: [CHANGELOG](./changelog.md)
+For full change history and release notes, see: [CHANGELOG](./changelog.md)
 
-## Schnellstart
+## Quick start
 
-### 1) Backend lokal starten
+### 1) Start the backend locally
 
 ```powershell
 cd backend
 go run .
 ```
 
-Standard-URL: `http://localhost:8080`
+Default URL: `http://localhost:8080`
 
-### 2) Agent auf einem Host starten
+### 2) Run an agent on a host
 
-Passen Sie `BACKEND_URL` und `AGENT_ID` für jeden Agent an. Beispiel (PowerShell):
+Set `BACKEND_URL` and `AGENT_ID` for each agent. Example (PowerShell):
 
 ```powershell
 cd agent
@@ -35,7 +33,7 @@ $env:AGENT_INTERVAL_SECONDS = "30"
 go run .
 ```
 
-Beispiel für einen zweiten Host:
+Example for a second host:
 
 ```powershell
 cd agent
@@ -44,42 +42,42 @@ $env:AGENT_ID = "server-2"
 go run .
 ```
 
-### 3) Frontend lokal starten
+### 3) Start the frontend
 
 ```powershell
 cd frontend
 python -m http.server 3000
 ```
 
-Öffne das Frontend im Browser: `http://localhost:3000`
+Open the UI at `http://localhost:3000`
 
-## API Endpoints
+## API endpoints
 
-- `GET /api/health` — Prüfe den Backend-Status
-- `GET /api/data` — Lese gespeicherte Metriken
-- `POST /api/data` — Sende Metriken (Agent -> Backend)
-- `GET /api/alerts` — Lese Alert-Konfiguration
-- `POST /api/alerts` — Speichere Alert-Konfiguration
+- `GET /api/health` � Check backend health
+- `GET /api/data` � Read stored metrics
+- `POST /api/data` � Post metrics (agent -> backend)
+- `GET /api/alerts` � Read alert configuration
+- `POST /api/alerts` � Save alert configuration
 
-## Discord Alerts
+## Discord alerts
 
-Im Frontend können Nutzer folgende Einstellungen vornehmen:
+The frontend allows configuring:
 
-- Discord Webhook URL
-- Alert aktiv/inaktiv
-- CPU-, RAM- und Disk-Grenzwerte (in Prozent)
-- Cooldown (Sekunden) für wiederkehrende Alerts
+- Discord webhook URL
+- Enable/disable alerts
+- CPU, RAM and disk thresholds (percent)
+- Cooldown (seconds) to avoid repeated notifications
 
-Wenn ein Agent einen Grenzwert überschreitet, sendet das Backend eine Nachricht an den konfigurierten Discord Webhook.
+When an agent exceeds a threshold, the backend will send a message to the configured Discord webhook.
 
-## Agent Konfiguration (Umgebungsvariablen)
+## Agent configuration (env variables)
 
-- `BACKEND_URL` — URL zum Backend (Standard: `http://localhost:8080/api/data`)
-- `AGENT_ID` — Eindeutige ID pro Agent / Host
-- `AGENT_INTERVAL_SECONDS` — Sendeintervall in Sekunden (Standard: `30`)
+- `BACKEND_URL` � URL to the backend (default: `http://localhost:8080/api/data`)
+- `AGENT_ID` � Unique ID per agent/host
+- `AGENT_INTERVAL_SECONDS` � Send interval in seconds (default: `30`)
 
-## Weitere Hinweise
+## Notes
 
-- Dieses Projekt ist ein Minimalbeispiel. Für Produktion wären zusätzliche Schritte nötig: Authentifizierung, sichere Speicherung von Webhooks, Rate limiting, Tests und Monitoring der Agenten.
+- This project is a minimal example. For production use you should add authentication, secure storage of webhooks, rate limiting, tests and monitoring of agents.
 
-Wenn du möchtest, schreibe ich einen kurzen Abschnitt zur Deployment-Strategie (Docker / systemd) oder füge Beispiele für Alert-Regeln hinzu.
+If you want, I can add a short deployment guide (Docker/systemd) or example alert rules.
