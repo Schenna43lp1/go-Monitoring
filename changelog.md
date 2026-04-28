@@ -1,26 +1,46 @@
 # Changelog
 
-Alle signifikanten Änderungen am Projekt werden in diesem Dokument chronologisch festgehalten.
-Dieses Changelog folgt einfachen Konventionen (Unreleased → nächste Version, dann Versions-Abschnitte).
+All notable changes to this project are recorded here in chronological order. This document follows a simple "Keep a Changelog" style (simplified).
 
 ## Unreleased
 
-- Hinzugefügt
-    - Platzhalter für neue Features, die noch nicht veröffentlicht sind.
-- Geändert
-    - Notizen zu geplanten API- oder Verhaltensänderungen.
-- Behoben
-    - Bugs, die vor dem nächsten Release noch geschlossen werden müssen.
+### Added (Unreleased)
+
+- Go monitoring agent: Minimal Go-based agent to collect and post metrics to the backend.
+- Discord integration: Support for Discord webhooks to deliver real-time monitoring alerts.
+
+### Changed (Unreleased)
+
+- Project refactor: Repository restructured into a modular layout by separating Backend, Agent, and Frontend components.
+- Decoupled logic: Implemented dedicated responsibilities for the agent and backend to improve API handling and scalability.
+- Frontend interface improvements: Enhanced UI for better data visualization and interaction.
+- Improved API handling: Optimized backend processing of incoming agent data for greater reliability.
+
+### Fixed (Unreleased)
+
+- System metrics alerts: Configured alert thresholds for critical system metrics (planned/ongoing).
 
 ---
 
 ## [0.1.0] - 2026-04-28
-- Hinzugefügt
-    - Erstes Grundgerüst des Projekts.
-    - README, Basisstruktur und initiale Konfiguration.
-- Geändert
-    - —
-- Behoben
-    - —
-- Entfernt
-    - —
+
+### Added (0.1.0)
+
+- Initial project skeleton with separate components:
+  - `agent/` (Go agent to collect and send metrics)
+  - `backend/` (Go backend for processing and storage)
+  - `frontend/` (simple UI for visualization)
+
+- README, base structure and initial configuration
+- Minimal monitoring agent written in Go
+- Discord webhook integration for alerts
+
+### Changed (0.1.0)
+
+- Refactored project structure to decouple agent, backend and frontend.
+
+### Maintenance (0.1.0)
+
+- Added a `.gitignore` for Go projects
+
+- Removed accidentally committed build artifacts (e.g. `.gocache`)
