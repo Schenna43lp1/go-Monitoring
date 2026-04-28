@@ -44,3 +44,9 @@ All notable changes to this project are recorded here in chronological order. Th
 - Added a `.gitignore` for Go projects
 
 - Removed accidentally committed build artifacts (e.g. `.gocache`)
+
+## [0.1.1] - 2026-04-28
+
+### Changed (0.1.1)
+
+- README, verbessert

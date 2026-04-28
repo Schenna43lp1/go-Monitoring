@@ -1,79 +1,85 @@
-# Multi-Server Monitoring mit Frontend und Backend
+﻿# Multi-Server Monitoring (Frontend + Backend + Agent)
 
-Minimalbeispiel mit drei getrennten Teilen.
+Kurze Anleitung und Übersicht für das Beispielprojekt. Ziel ist ein leichtgewichtiges Monitoring-System mit mehreren Agenten, einem zentralen Go-Backend und einem einfachen Frontend zur Visualisierung.
 
-- `backend/`: zentrale Go-API, nimmt Daten von allen Agenten an und sendet Alerts an Discord
-- `agent/`: kleiner Go-Agent, laeuft auf mehreren Servern und sendet CPU-, RAM- und Disk-Daten
-- `frontend/`: statische HTML/CSS/JS-Oberflaeche, zeigt Metriken und speichert Alert-Regeln
+## Repositorystruktur
+
+- `backend/` — zentrale Go-API, empfängt Metriken von Agenten und versendet Alerts (z. B. an Discord)
+- `agent/` — kleiner Go-Agent, läuft auf Hosts und sendet CPU-, RAM- und Disk-Metriken
+- `frontend/` — statische HTML/CSS/JS-Oberfläche zur Ansicht von Metriken und Verwaltung von Alert-Regeln
 
 ## Changelog
 
 Weitere Informationen zu Änderungen und Releases: [CHANGELOG](./changelog.md)
 
-## 1. Backend zentral starten
+## Schnellstart
+
+### 1) Backend lokal starten
 
 ```powershell
 cd backend
 go run .
 ```
 
-Das Backend laeuft standardmaessig auf `http://localhost:8080`.
+Standard-URL: `http://localhost:8080`
 
-## 2. Agent auf jedem Server starten
+### 2) Agent auf einem Host starten
 
-Auf jedem Server dieselbe Agent-App starten, aber mit eigener `AGENT_ID`. Der Agent sendet regelmaessig CPU-Auslastung, RAM-Nutzung und Disk-Nutzung an das Backend.
-
-```powershell
-cd agent
-$env:BACKEND_URL="http://DEIN-BACKEND-SERVER:8080/api/data"
-$env:AGENT_ID="server-1"
-$env:AGENT_INTERVAL_SECONDS="30"
-go run .
-```
-
-Beispiel fuer einen zweiten Server:
+Passen Sie `BACKEND_URL` und `AGENT_ID` für jeden Agent an. Beispiel (PowerShell):
 
 ```powershell
 cd agent
-$env:BACKEND_URL="http://DEIN-BACKEND-SERVER:8080/api/data"
-$env:AGENT_ID="server-2"
+$env:BACKEND_URL = "http://localhost:8080/api/data"
+$env:AGENT_ID = "server-1"
+$env:AGENT_INTERVAL_SECONDS = "30"
 go run .
 ```
 
-## 3. Frontend starten
+Beispiel für einen zweiten Host:
+
+```powershell
+cd agent
+$env:BACKEND_URL = "http://localhost:8080/api/data"
+$env:AGENT_ID = "server-2"
+go run .
+```
+
+### 3) Frontend lokal starten
 
 ```powershell
 cd frontend
 python -m http.server 3000
 ```
 
-Dann im Browser oeffnen:
+Öffne das Frontend im Browser: `http://localhost:3000`
 
-`http://localhost:3000`
+## API Endpoints
 
-## API
+- `GET /api/health` — Prüfe den Backend-Status
+- `GET /api/data` — Lese gespeicherte Metriken
+- `POST /api/data` — Sende Metriken (Agent -> Backend)
+- `GET /api/alerts` — Lese Alert-Konfiguration
+- `POST /api/alerts` — Speichere Alert-Konfiguration
 
-- `GET /api/health`: Status pruefen
-- `GET /api/data`: gespeicherte Daten lesen
-- `POST /api/data`: Daten speichern
-- `GET /api/alerts`: Alert-Konfiguration lesen
-- `POST /api/alerts`: Alert-Konfiguration speichern
+## Discord Alerts
 
-## Discord-Alerts
-
-Im Frontend koennen folgende Werte eingestellt werden:
+Im Frontend können Nutzer folgende Einstellungen vornehmen:
 
 - Discord Webhook URL
 - Alert aktiv/inaktiv
-- CPU-Grenzwert in Prozent
-- RAM-Grenzwert in Prozent
-- Disk-Grenzwert in Prozent
-- Cooldown in Sekunden, damit derselbe Alert nicht zu oft gesendet wird
+- CPU-, RAM- und Disk-Grenzwerte (in Prozent)
+- Cooldown (Sekunden) für wiederkehrende Alerts
 
-Wenn ein Agent einen Grenzwert ueberschreitet, sendet das Backend eine Nachricht an den Discord Webhook.
+Wenn ein Agent einen Grenzwert überschreitet, sendet das Backend eine Nachricht an den konfigurierten Discord Webhook.
 
-## Agent-Konfiguration
+## Agent Konfiguration (Umgebungsvariablen)
 
-- `BACKEND_URL`: zentrale Backend-URL, default `http://localhost:8080/api/data`
-- `AGENT_ID`: eindeutiger Name pro Server, default basiert auf Hostname
-- `AGENT_INTERVAL_SECONDS`: Sendeintervall, default `30`
+- `BACKEND_URL` — URL zum Backend (Standard: `http://localhost:8080/api/data`)
+- `AGENT_ID` — Eindeutige ID pro Agent / Host
+- `AGENT_INTERVAL_SECONDS` — Sendeintervall in Sekunden (Standard: `30`)
+
+## Weitere Hinweise
+
+- Dieses Projekt ist ein Minimalbeispiel. Für Produktion wären zusätzliche Schritte nötig: Authentifizierung, sichere Speicherung von Webhooks, Rate limiting, Tests und Monitoring der Agenten.
+
+Wenn du möchtest, schreibe ich einen kurzen Abschnitt zur Deployment-Strategie (Docker / systemd) oder füge Beispiele für Alert-Regeln hinzu.
