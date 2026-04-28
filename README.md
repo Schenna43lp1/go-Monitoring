@@ -6,6 +6,10 @@ Minimalbeispiel mit drei getrennten Teilen.
 - `agent/`: kleiner Go-Agent, laeuft auf mehreren Servern und sendet CPU-, RAM- und Disk-Daten
 - `frontend/`: statische HTML/CSS/JS-Oberflaeche, zeigt Metriken und speichert Alert-Regeln
 
+## Changelog
+
+Weitere Informationen zu Änderungen und Releases: [CHANGELOG](./changelog.md)
+
 ## 1. Backend zentral starten
 
 ```powershell
