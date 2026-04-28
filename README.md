@@ -1,10 +1,10 @@
-# Multi-Server Agent mit Frontend und Backend
+# Multi-Server Monitoring mit Frontend und Backend
 
 Minimalbeispiel mit drei getrennten Teilen.
 
-- `backend/`: zentrale Go-API, nimmt Daten von allen Agenten an
-- `agent/`: kleiner Go-Agent, laeuft auf mehreren Servern und sendet Heartbeats
-- `frontend/`: statische HTML/CSS/JS-Oberflaeche, liest Daten vom Backend
+- `backend/`: zentrale Go-API, nimmt Daten von allen Agenten an und sendet Alerts an Discord
+- `agent/`: kleiner Go-Agent, laeuft auf mehreren Servern und sendet CPU-, RAM- und Disk-Daten
+- `frontend/`: statische HTML/CSS/JS-Oberflaeche, zeigt Metriken und speichert Alert-Regeln
 
 ## 1. Backend zentral starten
 
@@ -17,7 +17,7 @@ Das Backend laeuft standardmaessig auf `http://localhost:8080`.
 
 ## 2. Agent auf jedem Server starten
 
-Auf jedem Server dieselbe Agent-App starten, aber mit eigener `AGENT_ID`.
+Auf jedem Server dieselbe Agent-App starten, aber mit eigener `AGENT_ID`. Der Agent sendet regelmaessig CPU-Auslastung, RAM-Nutzung und Disk-Nutzung an das Backend.
 
 ```powershell
 cd agent
@@ -52,6 +52,21 @@ Dann im Browser oeffnen:
 - `GET /api/health`: Status pruefen
 - `GET /api/data`: gespeicherte Daten lesen
 - `POST /api/data`: Daten speichern
+- `GET /api/alerts`: Alert-Konfiguration lesen
+- `POST /api/alerts`: Alert-Konfiguration speichern
+
+## Discord-Alerts
+
+Im Frontend koennen folgende Werte eingestellt werden:
+
+- Discord Webhook URL
+- Alert aktiv/inaktiv
+- CPU-Grenzwert in Prozent
+- RAM-Grenzwert in Prozent
+- Disk-Grenzwert in Prozent
+- Cooldown in Sekunden, damit derselbe Alert nicht zu oft gesendet wird
+
+Wenn ein Agent einen Grenzwert ueberschreitet, sendet das Backend eine Nachricht an den Discord Webhook.
 
 ## Agent-Konfiguration
 

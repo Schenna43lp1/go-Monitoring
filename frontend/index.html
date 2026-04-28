@@ -3,37 +3,86 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Minimal Agent Frontend</title>
+    <title>Server Monitoring</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Multi-Server Agent</p>
+          <h1>Server Monitoring</h1>
+        </div>
+        <button id="refresh" type="button">Aktualisieren</button>
+      </header>
+
+      <section class="metrics" id="metrics"></section>
+
       <section class="panel">
-        <h1>Agent Daten</h1>
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Discord</p>
+            <h2>Alerts</h2>
+          </div>
+          <label class="switch">
+            <input id="alerts-enabled" type="checkbox" />
+            <span>Aktiv</span>
+          </label>
+        </div>
 
-        <form id="data-form">
-          <label>
-            Agent ID
-            <input id="agent-id" name="agent_id" value="agent-1" />
+        <form id="alert-form" class="alert-form">
+          <label class="wide">
+            Webhook URL
+            <input id="discord-webhook" name="discord_webhook_url" type="url" placeholder="https://discord.com/api/webhooks/..." />
           </label>
 
           <label>
-            Nachricht
-            <textarea id="message" name="message" rows="4">Hallo Backend</textarea>
+            CPU ab %
+            <input id="cpu-threshold" name="cpu_percent" type="number" min="1" max="100" value="90" />
           </label>
 
-          <button type="submit">Senden</button>
+          <label>
+            RAM ab %
+            <input id="ram-threshold" name="ram_percent" type="number" min="1" max="100" value="90" />
+          </label>
+
+          <label>
+            Disk ab %
+            <input id="disk-threshold" name="disk_percent" type="number" min="1" max="100" value="90" />
+          </label>
+
+          <label>
+            Cooldown in Sekunden
+            <input id="cooldown-seconds" name="cooldown_seconds" type="number" min="30" value="300" />
+          </label>
+
+          <button type="submit">Speichern</button>
         </form>
 
         <p id="status" class="status"></p>
       </section>
 
       <section class="panel">
-        <div class="list-header">
-          <h2>Backend Daten</h2>
-          <button id="refresh" type="button">Aktualisieren</button>
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Live</p>
+            <h2>Letzte Agent-Daten</h2>
+          </div>
         </div>
-        <pre id="output">[]</pre>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>CPU</th>
+                <th>RAM</th>
+                <th>Disk</th>
+                <th>Letztes Signal</th>
+              </tr>
+            </thead>
+            <tbody id="agent-table"></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
