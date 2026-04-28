@@ -61,15 +61,23 @@ func main() {
 }
 
 func sendHeartbeat(ctx context.Context, client *http.Client, cfg Config, message string) {
+	metrics := collectMetrics()
 	payload := Payload{
 		AgentID:   cfg.AgentID,
 		Message:   message,
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
 		Meta: map[string]any{
-			"hostname": hostname(),
-			"ips":      localIPs(),
-			"os":       runtime.GOOS,
-			"arch":     runtime.GOARCH,
+			"hostname":      hostname(),
+			"ips":           localIPs(),
+			"os":            runtime.GOOS,
+			"arch":          runtime.GOARCH,
+			"cpu_percent":   metrics.CPUPercent,
+			"ram_percent":   metrics.RAMPercent,
+			"disk_percent":  metrics.DiskPercent,
+			"ram_total_mb":  metrics.RAMTotalMB,
+			"ram_used_mb":   metrics.RAMUsedMB,
+			"disk_total_gb": metrics.DiskTotalGB,
+			"disk_used_gb":  metrics.DiskUsedGB,
 		},
 	}
 
