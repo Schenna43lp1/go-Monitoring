@@ -72,9 +72,9 @@ When an agent exceeds a threshold, the backend will send a message to the config
 
 ## Agent configuration (env variables)
 
-- `BACKEND_URL` � URL to the backend (default: `http://localhost:8080/api/data`)
-- `AGENT_ID` � Unique ID per agent/host
-- `AGENT_INTERVAL_SECONDS` � Send interval in seconds (default: `30`)
+- `BACKEND_URL` — URL to the backend (default: `http://localhost:8080/api/data`)
+- `AGENT_ID` — Unique ID per agent/host
+- `AGENT_INTERVAL_SECONDS` — Send interval in seconds (default: `30`)
 
 ## Notes
 
