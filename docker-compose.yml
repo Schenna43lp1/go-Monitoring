@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: go-monitoring-backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=info
+    volumes:
+      - ./backend/data:/data
+
+  agent:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    image: go-monitoring-agent:latest
+    environment:
+      - BACKEND_URL=http://backend:8080/api/data
+      - AGENT_ID=agent-1
+      - AGENT_INTERVAL_SECONDS=30
+    depends_on:
+      - backend
+    restart: on-failure
